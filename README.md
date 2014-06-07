@@ -1,0 +1,4 @@
+rabbitmq-tutorials
+==================
+
+Learning RabbitMQ
