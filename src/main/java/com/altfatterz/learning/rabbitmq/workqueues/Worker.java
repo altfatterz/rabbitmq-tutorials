@@ -19,6 +19,7 @@ public class Worker {
         channel.queueDeclare(TASK_QUEUE_NAME, true, false, false, null);
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
+        // set message prefetch count to 1
         channel.basicQos(1);
 
         QueueingConsumer consumer = new QueueingConsumer(channel);

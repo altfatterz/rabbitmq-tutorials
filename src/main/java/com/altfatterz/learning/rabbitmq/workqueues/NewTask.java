@@ -15,11 +15,14 @@ public class NewTask {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
-        channel.queueDeclare(TASK_QUEUE_NAME, true, false, false, null);
+        boolean durable = true; // after server restart queue will be there
+        // created an implicit binding to the default exchange with the routing key equal to the queue
+        channel.queueDeclare(TASK_QUEUE_NAME, durable, false, false, null);
 
-        String message = getMessage(argv);
+        String message = "...hello ......zoli ....peter";
 
-        channel.basicPublish( "", TASK_QUEUE_NAME,
+        // make messages persistent
+        channel.basicPublish("", TASK_QUEUE_NAME,
                 MessageProperties.PERSISTENT_TEXT_PLAIN,
                 message.getBytes());
         System.out.println(" [x] Sent '" + message + "'");
