@@ -19,11 +19,15 @@ public class Worker {
         channel.queueDeclare(TASK_QUEUE_NAME, true, false, false, null);
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
-        // set message prefetch count to 1
+        // This tells RabbitMQ not to give more than one message to a worker at a time
+        // In other words, don't dispatch a new message to a worker until it has processed and acknowledged the previous one.
         channel.basicQos(1);
 
         QueueingConsumer consumer = new QueueingConsumer(channel);
-        channel.basicConsume(TASK_QUEUE_NAME, false, consumer);
+
+        // using the explicit acknowledgment model instead of the automatic acknowledgement model
+        boolean autoAck = false;
+        channel.basicConsume(TASK_QUEUE_NAME, autoAck, consumer);
 
         while (true) {
             QueueingConsumer.Delivery delivery = consumer.nextDelivery();
