@@ -4,7 +4,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 
-// subscribe only to a subset of the messages
+// using direct exchange to selectively receiving messages, however we cannot do routing based on multiple criteria
 
 public class EmitLogDirect {
 
