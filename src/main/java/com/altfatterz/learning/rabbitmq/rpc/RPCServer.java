@@ -27,7 +27,8 @@ public class RPCServer {
         Channel channel = null;
         try {
             ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost("localhost");
+
+            // default is localhost, with guest/guest credentials
 
             connection = factory.newConnection();
             channel = connection.createChannel();
