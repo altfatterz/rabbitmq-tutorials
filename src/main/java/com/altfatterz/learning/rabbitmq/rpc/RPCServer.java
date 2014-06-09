@@ -9,6 +9,9 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 
 // If the RPC server is too slow, you can scale up by just running another one
 
+// use the http://www.rabbitmq.com/management.html
+// rabbitmq-plugins enable rabbitmq_management
+
 public class RPCServer {
 
     private static final String RPC_QUEUE_NAME = "rpc_queue";
