@@ -1,13 +1,13 @@
-package com.altfatterz.learning.rabbitmq.routing;
+package rabbitmq.publishsubscribe;
 
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;
 
-public class ReceiveLogsDirect {
+public class ReceiveLogs {
 
-    private static final String EXCHANGE_NAME = "direct_logs";
+    private static final String EXCHANGE_NAME = "logs";
 
     public static void main(String[] argv) throws Exception {
 
@@ -16,21 +16,16 @@ public class ReceiveLogsDirect {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
-        channel.exchangeDeclare(EXCHANGE_NAME, "direct");
+        // declaring on the receiver site the exact same channel.
+        channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
 
-        // queueDeclare() also creates an implicit binding to the default exchange ("") with the queue name as the routing key
         // queueDeclare() creates a non-durable, exclusive, auto-delete queue with generated name
+        // queueDeclare() also creates an implicit binding to the default exchange ("") with the queue name as the routing key
         String queueName = channel.queueDeclare().getQueue();
 
-        if (argv.length < 1){
-            System.err.println("Usage: ReceiveLogsDirect [info] [warning] [error]");
-            System.exit(1);
-        }
-
-        // creating a binding for each severity we are interested in
-        for(String severity : argv){
-            channel.queueBind(queueName, EXCHANGE_NAME, severity);
-        }
+        // we create a binding binding between the exchange and the queue.
+        // the routing key is ignored for fanout exchange.
+        channel.queueBind(queueName, EXCHANGE_NAME, "");
 
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
@@ -40,9 +35,8 @@ public class ReceiveLogsDirect {
         while (true) {
             QueueingConsumer.Delivery delivery = consumer.nextDelivery();
             String message = new String(delivery.getBody());
-            String routingKey = delivery.getEnvelope().getRoutingKey();
 
-            System.out.println(" [x] Received '" + routingKey + "':'" + message + "'");
+            System.out.println(" [x] Received '" + message + "'");
         }
     }
 }

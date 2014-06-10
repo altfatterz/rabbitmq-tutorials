@@ -1,4 +1,4 @@
-package com.altfatterz.learning.rabbitmq.helloworld;
+package rabbitmq.helloworld;
 
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;

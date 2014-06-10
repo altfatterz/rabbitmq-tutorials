@@ -1,14 +1,12 @@
-package com.altfatterz.learning.rabbitmq.publishsubscribe;
-
+package rabbitmq.workqueues;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.MessageProperties;
 
-// Delivering messages to multiple consumers. Publish/subscribe pattern.
+public class NewTask {
 
-public class EmitLog {
-
-    private static final String EXCHANGE_NAME = "logs";
+    private static final String TASK_QUEUE_NAME = "task_queue";
 
     public static void main(String[] argv) throws Exception {
 
@@ -17,18 +15,17 @@ public class EmitLog {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
-        // fanout exchange type, all subscribers will get the message. The routing key will be ignored.
-        channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+        boolean durable = true; // after server restart queue will be there
+
+        // creates an implicit binding to the default exchange with the routing key equal to the queue
+        channel.queueDeclare(TASK_QUEUE_NAME, durable, false, false, null);
 
         String message = getMessage(argv);
 
-        //the producer can only send messages to an exchange.
-        // The exchange type decides the message routing algorithm.
-
-        // if there are no connected subscribers the message will be discarded
-
-        channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes());
-
+        // make messages persistent
+        channel.basicPublish("", TASK_QUEUE_NAME,
+                MessageProperties.PERSISTENT_TEXT_PLAIN,
+                message.getBytes());
         System.out.println(" [x] Sent '" + message + "'");
 
         channel.close();
@@ -37,7 +34,7 @@ public class EmitLog {
 
     private static String getMessage(String[] strings){
         if (strings.length < 1)
-            return "info: Hello World!";
+            return "Hello World!";
         return joinStrings(strings, " ");
     }
 

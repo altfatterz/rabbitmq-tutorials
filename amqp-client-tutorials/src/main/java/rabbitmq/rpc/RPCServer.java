@@ -1,4 +1,4 @@
-package com.altfatterz.learning.rabbitmq.rpc;
+package rabbitmq.rpc;
 
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;

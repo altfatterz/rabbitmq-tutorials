@@ -1,13 +1,13 @@
-package com.altfatterz.learning.rabbitmq.publishsubscribe;
+package rabbitmq.helloworld;
 
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;
 
-public class ReceiveLogs {
+public class Consumer {
 
-    private static final String EXCHANGE_NAME = "logs";
+    private final static String QUEUE_NAME = "hello";
 
     public static void main(String[] argv) throws Exception {
 
@@ -16,26 +16,17 @@ public class ReceiveLogs {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
-        // declaring on the receiver site the exact same channel.
-        channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
-
-        // queueDeclare() creates a non-durable, exclusive, auto-delete queue with generated name
-        // queueDeclare() also creates an implicit binding to the default exchange ("") with the queue name as the routing key
-        String queueName = channel.queueDeclare().getQueue();
-
-        // we create a binding binding between the exchange and the queue.
-        // the routing key is ignored for fanout exchange.
-        channel.queueBind(queueName, EXCHANGE_NAME, "");
+        // declare queue in case consumer is started first
+        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
         QueueingConsumer consumer = new QueueingConsumer(channel);
-        channel.basicConsume(queueName, true, consumer);
+        channel.basicConsume(QUEUE_NAME, true, consumer);
 
         while (true) {
             QueueingConsumer.Delivery delivery = consumer.nextDelivery();
             String message = new String(delivery.getBody());
-
             System.out.println(" [x] Received '" + message + "'");
         }
     }

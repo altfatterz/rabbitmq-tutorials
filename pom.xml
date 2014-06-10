@@ -6,20 +6,10 @@
 
     <groupId>com.altfatterz.learning.rabbitmq</groupId>
     <artifactId>rabbitmq-tutorials</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-
-    <properties>
-        <rabbitmq.version>3.3.1</rabbitmq.version>
-    </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.rabbitmq</groupId>
-            <artifactId>amqp-client</artifactId>
-            <version>${rabbitmq.version}</version>
-        </dependency>
-
-    </dependencies>
-
-
+    <modules>
+        <module>amqp-client-tutorials</module>
+        <module>spring-rabbit-tutorials</module>
+    </modules>
 </project>

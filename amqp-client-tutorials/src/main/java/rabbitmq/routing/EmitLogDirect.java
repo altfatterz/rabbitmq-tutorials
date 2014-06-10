@@ -1,4 +1,4 @@
-package com.altfatterz.learning.rabbitmq.routing;
+package rabbitmq.routing;
 
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;

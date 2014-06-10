@@ -1,4 +1,4 @@
-package com.altfatterz.learning.rabbitmq.workqueues;
+package rabbitmq.workqueues;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
