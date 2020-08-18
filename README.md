@@ -33,6 +33,7 @@ $ rabbitmqadmin list exchanges
 ### Access RabbitMQ with Java client library (amqp-client)
 
 
-
-
 ### Access RabbitMQ using [Spring AMQP Framework](https://spring.io/projects/spring-amqp)
+
+
+### RabbitMQ on Kubernetes
