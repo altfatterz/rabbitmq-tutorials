@@ -12,7 +12,9 @@
     <artifactId>amqp-client-tutorials</artifactId>
 
     <properties>
-        <rabbitmq.version>3.3.1</rabbitmq.version>
+        <rabbitmq.version>5.9.0</rabbitmq.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <dependencies>

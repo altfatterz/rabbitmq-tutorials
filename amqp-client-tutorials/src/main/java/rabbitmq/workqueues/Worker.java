@@ -3,7 +3,7 @@ package rabbitmq.workqueues;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.QueueingConsumer;
+import com.rabbitmq.client.DeliverCallback;
 
 public class Worker {
 
@@ -23,27 +23,29 @@ public class Worker {
         // In other words, don't dispatch a new message to a worker until it has processed and acknowledged the previous one.
         channel.basicQos(1);
 
-        QueueingConsumer consumer = new QueueingConsumer(channel);
-
-        // using the explicit acknowledgment model instead of the automatic acknowledgement model
-        boolean autoAck = false;
-        channel.basicConsume(TASK_QUEUE_NAME, autoAck, consumer);
-
-        while (true) {
-            QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-            String message = new String(delivery.getBody());
+        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+            String message = new String(delivery.getBody(), "UTF-8");
 
             System.out.println(" [x] Received '" + message + "'");
-            doWork(message);
-            System.out.println(" [x] Done");
-
-            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-        }
+            try {
+                doWork(message);
+            } finally {
+                System.out.println(" [x] Done");
+                channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+            }
+        };
+        channel.basicConsume(TASK_QUEUE_NAME, false, deliverCallback, consumerTag -> { });
     }
 
-    private static void doWork(String task) throws InterruptedException {
-        for (char ch: task.toCharArray()) {
-            if (ch == '.') Thread.sleep(1000);
+    private static void doWork(String task) {
+        for (char ch : task.toCharArray()) {
+            if (ch == '.') {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException _ignored) {
+                    Thread.currentThread().interrupt();
+                }
+            }
         }
     }
 }
