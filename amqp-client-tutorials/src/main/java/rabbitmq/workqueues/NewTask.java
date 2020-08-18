@@ -1,12 +1,16 @@
 package rabbitmq.workqueues;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Connection;
+
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.MessageProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NewTask {
 
     private static final String TASK_QUEUE_NAME = "task_queue";
+    private final static Logger logger = LoggerFactory.getLogger(NewTask.class);
 
     public static void main(String[] argv) throws Exception {
 
@@ -15,8 +19,16 @@ public class NewTask {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
-        boolean durable = true; // after server restart queue will be there
+        // Message durability - we need to mark both the queue and messages as durable.
 
+        // Note that marking messages as persistent doesn't fully guarantee that a message won't be lost
+        // Although it tells RabbitMQ to save the message to disk, there is still a short time window when RabbitMQ
+        // has accepted a message and hasn't saved it yet.
+        // Also, RabbitMQ doesn't do fsync(2) for every message -- it may be just saved to cache and not really
+        // written to the disk.
+        // If you need a stronger guarantee then you can use `publisher confirms`
+
+        boolean durable = true; // after server restart queue will be there
         // creates an implicit binding to the default exchange with the routing key equal to the queue
         channel.queueDeclare(TASK_QUEUE_NAME, durable, false, false, null);
 
@@ -26,15 +38,16 @@ public class NewTask {
         channel.basicPublish("", TASK_QUEUE_NAME,
                 MessageProperties.PERSISTENT_TEXT_PLAIN,
                 message.getBytes());
-        System.out.println(" [x] Sent '" + message + "'");
+        logger.info(" [x] Sent '{}'", message);
 
         channel.close();
         connection.close();
     }
 
-    private static String getMessage(String[] strings){
-        if (strings.length < 1)
+    private static String getMessage(String[] strings) {
+        if (strings.length < 1) {
             return "Hello World!";
+        }
         return joinStrings(strings, " ");
     }
 

@@ -21,7 +21,7 @@ public class HelloWorldConsumer {
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
         logger.info(" [*] Waiting for messages. To exit press CTRL+C");
 
-        //We're about to tell the server to deliver us the messages from the queue.
+        // We're about to tell the server to deliver us the messages from the queue.
         // Since it will push us messages asynchronously, we provide a callback in the form of an object
         // that will buffer the messages until we're ready to use them.
         channel.basicConsume(QUEUE_NAME, true, new DeliverCallback() {
