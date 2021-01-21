@@ -7,7 +7,7 @@
     <groupId>com.altfatterz.learning.rabbitmq</groupId>
     <artifactId>rabbitmq-tutorials</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <modules>
         <module>amqp-client-tutorials</module>
         <module>spring-rabbit-tutorials</module>
