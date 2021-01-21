@@ -5,7 +5,8 @@
     <groupId>com.example</groupId>
     <artifactId>rabbitmq-getting-starterd</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>rabbitmq-getting-starterd</name>
+    <name>rabbitmq-getting-started</name>
+    <packaging>pom</packaging>
 
     <modules>
         <module>consumer</module>
