@@ -1,7 +1,7 @@
 spring:
   rabbitmq:
-    username: user
-    password: s3cr3t
+    username: guest
+    password: guest
 
 
 
