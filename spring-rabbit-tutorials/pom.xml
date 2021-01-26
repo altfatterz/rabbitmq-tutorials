@@ -11,20 +11,9 @@
     <packaging>pom</packaging>
     <artifactId>spring-rabbit-tutorials</artifactId>
 
-    <properties>
-        <spring.rabbit.version>1.3.4.RELEASE</spring.rabbit.version>
-    </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.amqp</groupId>
-            <artifactId>spring-rabbit</artifactId>
-            <version>${spring.rabbit.version}</version>
-        </dependency>
-    </dependencies>
-
     <modules>
         <module>rabbitmq-getting-started</module>
         <module>spring-cloud-stream-getting-started</module>
+        <module>async-demo</module>
     </modules>
 </project>
