@@ -22,7 +22,7 @@ public class BarRestController {
     @GetMapping("/bar/{id}")
     public ResponseEntity<?> bar(@PathVariable String id) {
         logger.info("Retrieving bar with {}", id);
-        String response = barService.getBar(id);
+        String response = barService.getBar(id); // this should be a blocking call
         barService.deleteBar(id);
         return response != null ? ResponseEntity.ok(response) : ResponseEntity.of(Optional.empty());
     }

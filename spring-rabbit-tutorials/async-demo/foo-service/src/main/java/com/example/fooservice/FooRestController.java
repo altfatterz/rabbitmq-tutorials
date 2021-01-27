@@ -21,7 +21,7 @@ public class FooRestController {
     @PostMapping("/foo/{id}")
     public void foo(@PathVariable String id) {
         logger.info("Sending message...");
-        Work work = new Work(id, "abc");
+        Work work = new Work(id);
         rabbitTemplate.convertAndSend(RabbitMQConfiguration.EXCHANGE_NAME, "", work);
     }
 }

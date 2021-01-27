@@ -15,7 +15,7 @@ public class BarService {
     @CachePut("bar")
     public String calculateBar(String id) {
         logger.info("calculateBar for id:{}", id);
-        return id + " !!!";
+        return "work with id " + id + " is done";
     }
 
     @Cacheable("bar")
