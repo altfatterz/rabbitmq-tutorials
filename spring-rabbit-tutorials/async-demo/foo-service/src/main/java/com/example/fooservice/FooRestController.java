@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class FooService {
+public class FooRestController {
 
-    private final Logger logger = LoggerFactory.getLogger(FooService.class);
+    private final Logger logger = LoggerFactory.getLogger(FooRestController.class);
 
     private final RabbitTemplate rabbitTemplate;
 
-    public FooService(RabbitTemplate rabbitTemplate) {
+    public FooRestController(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
