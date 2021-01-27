@@ -12,7 +12,7 @@ public class BarService {
 
     @Cacheable("bar")
     public String bar(String id) {
-        logger.info("Not from the cache, bar(" + id + ") executed ");
-        return "todo";
+        logger.info("BarService called with id:{}", id);
+        return id + " done!";
     }
 }

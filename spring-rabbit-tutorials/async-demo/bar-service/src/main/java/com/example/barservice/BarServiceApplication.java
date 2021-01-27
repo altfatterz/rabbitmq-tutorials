@@ -13,10 +13,4 @@ public class BarServiceApplication {
         SpringApplication.run(BarServiceApplication.class, args);
     }
 
-    @Bean
-    public Consumer<String> work() {
-        return person -> {
-            System.out.println("Received: " + person);
-        };
-    }
 }

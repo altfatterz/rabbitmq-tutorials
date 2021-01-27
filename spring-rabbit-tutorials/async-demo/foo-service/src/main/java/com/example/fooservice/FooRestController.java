@@ -3,6 +3,7 @@ package com.example.fooservice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,10 +18,10 @@ public class FooRestController {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    @PostMapping("/foo")
-    public void foo() {
+    @PostMapping("/foo/{id}")
+    public void foo(@PathVariable String id) {
         logger.info("Sending message...");
-        rabbitTemplate.convertAndSend(RabbitMQConfiguration.EXCHANGE_NAME,
-                "foo.bar.baz", "Work do be done!");
+        Work work = new Work(id, "abc");
+        rabbitTemplate.convertAndSend(RabbitMQConfiguration.EXCHANGE_NAME, "", work);
     }
 }
