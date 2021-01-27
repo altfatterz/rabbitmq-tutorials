@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 @Configuration
 public class MessageConsumer {
 
-    private final Logger logger = LoggerFactory.getLogger(BarService.class);
+    private final Logger logger = LoggerFactory.getLogger(MessageConsumer.class);
 
     private BarService barService;
 
@@ -22,7 +22,7 @@ public class MessageConsumer {
     public Consumer<Work> work() {
         return work -> {
             logger.info("Handling payload {}", work);
-            barService.bar(work.getId());
+            barService.getBar(work.getId());
         };
     }
 }
