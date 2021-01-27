@@ -22,7 +22,7 @@ public class MessageConsumer {
     public Consumer<Work> work() {
         return work -> {
             logger.info("Handling payload {}", work);
-            barService.getBar(work.getId());
+            barService.calculateBar(work.getId());
         };
     }
 }
