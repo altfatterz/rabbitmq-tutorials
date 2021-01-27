@@ -21,8 +21,18 @@ public class MessageConsumer {
     @Bean
     public Consumer<Work> work() {
         return work -> {
+            simulateSlowService(); // delay 1 when the consumer is not picking up the work
             logger.info("Handling payload {}", work);
             barService.calculateBar(work.getId());
         };
+    }
+
+    private void simulateSlowService() {
+        try {
+            long time = 5000L;
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }
