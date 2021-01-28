@@ -13,9 +13,11 @@ import java.util.Optional;
 public class BarRestController {
 
     private final Logger logger = LoggerFactory.getLogger(BarRestController.class);
+    private RetryableBarService retryableBarService;
     private BarService barService;
 
-    public BarRestController(BarService barService) {
+    public BarRestController(RetryableBarService retryableBarService, BarService barService) {
+        this.retryableBarService = retryableBarService;
         this.barService = barService;
     }
 
@@ -23,7 +25,9 @@ public class BarRestController {
     public ResponseEntity<?> bar(@PathVariable String id) {
         logger.info("Retrieving bar with {}", id);
 
-        String response = barService.getBar(id); // this should be a blocking call
+        String response = retryableBarService.getBar(id);
+
+        // invalidate the cache right away.
         barService.deleteBar(id);
 
         return response != null ? ResponseEntity.ok(response) : ResponseEntity.of(Optional.empty());

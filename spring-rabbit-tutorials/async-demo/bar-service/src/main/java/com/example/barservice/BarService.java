@@ -1,12 +1,10 @@
 package com.example.barservice;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.cp.lock.FencedLock;
 import com.hazelcast.map.IMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.function.BiConsumer;
@@ -22,7 +20,6 @@ public class BarService {
         this.hazelcastInstance = hazelcastInstance;
     }
 
-
     public void calculateBar(String id) {
         logger.info("calculateBar for id:{}", id);
 
@@ -37,13 +34,11 @@ public class BarService {
         }
     }
 
-    @Cacheable("bar")
-    public String getBar(String id) {
-        FencedLock lock = hazelcastInstance.getCPSubsystem().getLock("id");
-
-
-        logger.info("this line should not be printed");
-        return null;
+    public String getBar(String id) throws CachedBarNotFoundException {
+        IMap<Object, Object> map = hazelcastInstance.getMap("bar");
+        String value = (String) map.get(id);
+        if (value == null) throw new CachedBarNotFoundException("cached bar not found");
+        return value;
     }
 
     public void cacheDetails() {
