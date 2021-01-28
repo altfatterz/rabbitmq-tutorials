@@ -5,6 +5,9 @@ import com.hazelcast.map.IMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.util.function.BiConsumer;
@@ -51,8 +54,19 @@ public class BarService {
         });
     }
 
+    @Retryable(value = CachedBarNotFoundException.class, maxAttempts = 10, backoff = @Backoff(500))
+    public String getBarWithRetry(String id) {
+        return getBar(id);
+    }
+
+    // Will be executed after we tried the maxAttempts
+    @Recover
+    public String recover(CachedBarNotFoundException e) {
+        return null;
+    }
+
     @CacheEvict("bar")
-    public void deleteBar(String id) {
+    public void deleteBarFromCache(String id) {
         logger.info("bar deleted with id:{}", id);
     }
 

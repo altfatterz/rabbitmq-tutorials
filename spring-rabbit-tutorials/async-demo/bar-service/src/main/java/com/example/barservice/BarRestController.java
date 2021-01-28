@@ -13,11 +13,9 @@ import java.util.Optional;
 public class BarRestController {
 
     private final Logger logger = LoggerFactory.getLogger(BarRestController.class);
-    private RetryableBarService retryableBarService;
     private BarService barService;
 
-    public BarRestController(RetryableBarService retryableBarService, BarService barService) {
-        this.retryableBarService = retryableBarService;
+    public BarRestController(BarService barService) {
         this.barService = barService;
     }
 
@@ -25,10 +23,10 @@ public class BarRestController {
     public ResponseEntity<?> bar(@PathVariable String id) {
         logger.info("Retrieving bar with {}", id);
 
-        String response = retryableBarService.getBar(id);
+        String response = barService.getBarWithRetry(id);
 
         // invalidate the cache right away.
-        barService.deleteBar(id);
+        barService.deleteBarFromCache(id);
 
         return response != null ? ResponseEntity.ok(response) : ResponseEntity.of(Optional.empty());
     }
