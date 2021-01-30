@@ -15,5 +15,7 @@
         <module>rabbitmq-getting-started</module>
         <module>spring-cloud-stream-getting-started</module>
         <module>async-demo</module>
+        <module>message-with-header-consumer</module>
+        <module>message-with-header-producer</module>
     </modules>
 </project>
