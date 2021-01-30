@@ -11,7 +11,6 @@
     <modules>
         <module>foo-service</module>
         <module>bar-service</module>
-        <module>bar-service-kotlin</module>
     </modules>
 
 </project>
